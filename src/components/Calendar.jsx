@@ -5,10 +5,10 @@ function Calendar() {
   const todayYear = today.getFullYear();
   const todayMonth = today.getMonth();
   const todayDate = today.getDate();
-  const [year, setYear] = useState(2026);
-  const [month, setMonth] = useState(3);
   const [selectedView, setSelectedView] = useState("month");
-  const [selectedDate, setSelectedDate] = useState(today);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const year = selectedDate.getFullYear();
+  const month = selectedDate.getMonth();
   const monthNames = [
     "January",
     "February",
@@ -33,26 +33,19 @@ function Calendar() {
   const trailingEmptyCells = Array.from({ length: 42 - totalCells });
 
   function goToPrevMonth() {
-    if (month === 0) {
-      setMonth(11);
-      setYear(year - 1);
-    } else {
-      setMonth(month - 1);
-    }
+    const prev = new Date(selectedDate);
+    prev.setMonth(prev.getMonth() - 1);
+    setSelectedDate(prev);
   }
 
   function goToNextMonth() {
-    if (month === 11) {
-      setMonth(0);
-      setYear(year + 1);
-    } else {
-      setMonth(month + 1);
-    }
+    const next = new Date(selectedDate);
+    next.setMonth(next.getMonth() + 1);
+    setSelectedDate(next);
   }
 
   function goToToday() {
-    setYear(todayYear);
-    setMonth(todayMonth);
+    setSelectedDate(new Date());
   }
   console.log(emptyCells.length, days.length, trailingEmptyCells.length);
   return (
