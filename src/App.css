@@ -113,3 +113,24 @@ body {
   outline: 2px solid #646cff;
   outline-offset: -2px;
 }
+
+.day-timeline {
+  margin-top: 20px;
+}
+
+.time-slot {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  height: 60px;
+}
+
+.time-label {
+  width: 80px;
+  padding: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.time-content {
+  flex: 1;
+}
