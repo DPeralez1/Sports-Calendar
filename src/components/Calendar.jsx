@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DayView from "./DayView";
 
 function Calendar() {
   const today = new Date();
@@ -47,7 +48,7 @@ function Calendar() {
   function goToToday() {
     setSelectedDate(new Date());
   }
-  console.log(emptyCells.length, days.length, trailingEmptyCells.length);
+
   return (
     <div className="calendar-container">
       {/* TOPBAR — ALWAYS VISIBLE */}
@@ -141,14 +142,8 @@ function Calendar() {
       )}
 
       {/* DAY VIEW */}
-      {selectedView === "day" && selectedDate && (
-        <div>
-          <h2>
-            {monthNames[selectedDate.getMonth()]} {selectedDate.getDate()},{" "}
-            {selectedDate.getFullYear()}
-          </h2>
-          <p>Events for this day coming soon...</p>
-        </div>
+      {selectedView === "day" && (
+        <DayView selectedDate={selectedDate}/>
       )}
     </div>
   );
