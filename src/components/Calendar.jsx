@@ -8,8 +8,9 @@ function Calendar() {
   const todayDate = today.getDate();
   const [selectedView, setSelectedView] = useState("month");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const year = selectedDate.getFullYear();
-  const month = selectedDate.getMonth();
+  const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
+  const year = currentMonthDate.getFullYear();
+  const month = currentMonthDate.getMonth();
   const monthNames = [
     "January",
     "February",
@@ -33,20 +34,23 @@ function Calendar() {
   const totalCells = emptyCells.length + days.length;
   const trailingEmptyCells = Array.from({ length: 42 - totalCells });
 
+
   function goToPrevMonth() {
-    const prev = new Date(selectedDate);
+    const prev = new Date(currentMonthDate);
     prev.setMonth(prev.getMonth() - 1);
-    setSelectedDate(prev);
+    setCurrentMonthDate(prev);
   }
 
   function goToNextMonth() {
-    const next = new Date(selectedDate);
+    const next = new Date(currentMonthDate);
     next.setMonth(next.getMonth() + 1);
-    setSelectedDate(next);
+    setCurrentMonthDate(next);
   }
 
   function goToToday() {
-    setSelectedDate(new Date());
+    const now = new Date();
+    setCurrentMonthDate(now);
+    setSelectedDate(now);
   }
 
   return (
