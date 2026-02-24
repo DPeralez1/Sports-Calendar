@@ -1,31 +1,9 @@
-function DayView({ selectedDate }) {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const month = selectedDate.getMonth();
-  const year = selectedDate.getFullYear();
-  const day = selectedDate.getDate();
+function DayView({ date }) {
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
   return (
     <div className="day-view">
-      <h2>
-        {monthNames[month]} {day}, {year}
-      </h2>
-
       <div className="day-timeline">
         {hours.map((hour) => {
           const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;

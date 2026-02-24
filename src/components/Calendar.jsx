@@ -1,5 +1,6 @@
 import { useState } from "react";
 import DayView from "./DayView";
+import WeekView from "./WeekView";
 
 function Calendar() {
   const today = new Date();
@@ -8,9 +9,9 @@ function Calendar() {
   const todayDate = today.getDate();
   const [selectedView, setSelectedView] = useState("month");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
-  const year = currentMonthDate.getFullYear();
-  const month = currentMonthDate.getMonth();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
   const monthNames = [
     "January",
     "February",
@@ -33,24 +34,92 @@ function Calendar() {
   const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
   const totalCells = emptyCells.length + days.length;
   const trailingEmptyCells = Array.from({ length: 42 - totalCells });
+  const startOfWeek = getStartOfWeek(currentDate);
 
+  function getStartOfWeek(currentDate) {
+    const start = new Date(currentDate);
+    // getDay() gives us weekday index (0–6)
+    const dayOfWeek = start.getDay();
 
-  function goToPrevMonth() {
-    const prev = new Date(currentMonthDate);
-    prev.setMonth(prev.getMonth() - 1);
-    setCurrentMonthDate(prev);
+    // Subtract weekday index to go back to Sunday
+    start.setDate(start.getDate() - dayOfWeek);
+
+    // Return calculated Sunday
+    return start;
   }
 
-  function goToNextMonth() {
-    const next = new Date(currentMonthDate);
-    next.setMonth(next.getMonth() + 1);
-    setCurrentMonthDate(next);
+  function goToPrev() {
+    const newDate = new Date(currentDate);
+
+    if (selectedView === "month") {
+      newDate.setMonth(newDate.getMonth() - 1);
+    }
+    if (selectedView === "week") {
+      newDate.setDate(newDate.getDate() - 7);
+    }
+
+    if (selectedView === "day") {
+      newDate.setDate(newDate.getDate() - 1);
+    }
+
+    if (selectedView === "year") {
+      newDate.setFullYear(newDate.getFullYear() - 1);
+    }
+
+    setCurrentDate(newDate);
+  }
+
+  function goToNext() {
+    const newDate = new Date(currentDate);
+
+    if (selectedView === "month") {
+      newDate.setMonth(newDate.getMonth() + 1);
+    }
+
+    if (selectedView === "week") {
+      newDate.setDate(newDate.getDate() + 7);
+    }
+
+    if (selectedView === "day") {
+      newDate.setDate(newDate.getDate() + 1);
+    }
+
+    if (selectedView === "year") {
+      newDate.setFullYear(newDate.getFullYear() + 1);
+    }
+
+    setCurrentDate(newDate);
   }
 
   function goToToday() {
     const now = new Date();
-    setCurrentMonthDate(now);
+    setCurrentDate(now);
     setSelectedDate(now);
+  }
+
+  function getHeaderTitle() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    if (selectedView === "month") {
+      return `${monthNames[month]} ${year}`;
+    }
+
+    if (selectedView === "week") {
+      const startOfWeek = new Date(currentDate);
+      startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+      return `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
+    }
+    if (selectedView === "day") {
+      return currentDate.toDateString();
+    }
+    if (selectedView === "year") {
+      return `${year}`;
+    }
   }
 
   return (
@@ -58,13 +127,11 @@ function Calendar() {
       {/* TOPBAR — ALWAYS VISIBLE */}
       <div className="calendar-topbar">
         <div className="calendar-left-controls">
-          <button onClick={goToPrevMonth}>{"<"}</button>
-          <button onClick={goToNextMonth}>{">"}</button>
+          <button onClick={goToPrev}>{"<"}</button>
+          <button onClick={goToNext}>{">"}</button>
           <button onClick={goToToday}>Today</button>
 
-          <div className="month-title">
-            {monthNames[month]} {year}
-          </div>
+          <div className="month-title">{getHeaderTitle()}</div>
         </div>
 
         <div className="calendar-right-controls">
@@ -72,6 +139,7 @@ function Calendar() {
             value={selectedView}
             onChange={(e) => setSelectedView(e.target.value)}
           >
+            <option value="year">Year</option>
             <option value="month">Month</option>
             <option value="week">Week</option>
             <option value="day">Day</option>
@@ -104,19 +172,19 @@ function Calendar() {
             })}
 
             {days.map((day) => {
-              const currentDate = new Date(year, month, day);
+              const cellDate = new Date(year, month, day);
 
               const isToday =
                 day === todayDate && month === todayMonth && year === todayYear;
 
               const isSelected =
                 selectedDate &&
-                currentDate.toDateString() === selectedDate.toDateString();
+                cellDate.toDateString() === selectedDate.toDateString();
 
               return (
                 <div
                   key={day}
-                  onClick={() => setSelectedDate(currentDate)}
+                  onClick={() => setSelectedDate(cellDate)}
                   className={`date-cell
                   ${isToday ? "today" : ""}
                   ${isSelected ? "selected" : ""}
@@ -138,17 +206,10 @@ function Calendar() {
       )}
 
       {/* WEEK VIEW */}
-      {selectedView === "week" && (
-        <div>
-          <h2>Week View</h2>
-          <p>Coming soon...</p>
-        </div>
-      )}
+      {selectedView === "week" && <WeekView startOfWeek={startOfWeek} />}
 
       {/* DAY VIEW */}
-      {selectedView === "day" && (
-        <DayView selectedDate={selectedDate}/>
-      )}
+      {selectedView === "day" && <DayView date={currentDate} />}
     </div>
   );
 }
