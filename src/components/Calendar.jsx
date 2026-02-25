@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DayView from "./DayView";
 import WeekView from "./WeekView";
+import YearView from "./YearView";
 
 function Calendar() {
   const today = new Date();
@@ -204,6 +205,8 @@ function Calendar() {
           </div>
         </>
       )}
+      {/* Year VIEW */}
+      {selectedView === "year" && <YearView currentDate={currentDate} />}
 
       {/* WEEK VIEW */}
       {selectedView === "week" && <WeekView startOfWeek={startOfWeek} />}
