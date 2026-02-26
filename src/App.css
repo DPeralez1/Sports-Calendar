@@ -146,21 +146,37 @@ body {
 .day-timeline {
   flex: 1;
   overflow-y: auto; /* Internal scroll */
+  position: relative;
 }
 
 /* Each hour row */
 .time-slot {
+  position: relative;
   display: flex;
-  border-bottom: 1px solid #333;
   height: 60px;
 }
+.time-slot::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 80px;
+  right: 0;
+  height: 1px;
+  background: #333;
+}
 
-/* Left-side time labels */
 .time-label {
   width: 80px;
-  padding: 5px;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 8px;
   font-size: 12px;
   color: #aaa;
+  position: relative;
+}
+
+.time-label span {
+  transform: translateY(-5px); /* match weekview optical alignment */
 }
 
 /* Right-side content area */
@@ -183,8 +199,6 @@ body {
 /* Current red time indicator line */
 .current-time-line {
   position: absolute;
-  left: 80px; /* after time column */
-  right: 0;
   height: 2px;
   background-color: transparent; /* remove solid fill */
   border-top: 2px dashed red; /* dashed line instead */
@@ -244,16 +258,22 @@ body {
 
 /* Time column (left side) */
 .week-time-label {
-  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-right: 8px;
   border-right: 1px solid #333;
+  font-size: 12px;
+  color: #aaa;
+  position: relative;
 }
 
 .week-time-label span {
-  position: absolute;
   top: 0;
   right: 8px;
   font-size: 12px;
   color: #aaa;
+  transform: translateY(-5px);
 }
 
 /* Individual day cells */
@@ -275,7 +295,7 @@ body {
 .week-cell::before {
   content: "";
   position: absolute;
-  top: 7px;
+  top: 0;
   left: 0;
   right: 0;
   height: 1px;

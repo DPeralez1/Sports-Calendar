@@ -29,6 +29,10 @@ function WeekView({ startOfWeek }) {
   // Generate 24 hours for each day column
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
+  const currentDayIndex = weekDays.findIndex(
+    (day) => day.toDateString() === now.toDateString(),
+  );
+
   return (
     <div className="week-view">
       {/* Top row showing the 7 day names */}
@@ -84,13 +88,15 @@ function WeekView({ startOfWeek }) {
             </div>
           );
         })}
-        {isCurrentWeek && currentHour >= 1 && (
+        {isCurrentWeek && currentDayIndex !== -1 && (
           <div
             className="current-time-line"
-            style={{ top: `${topOffset - 60}px` }}
-          >
-            <div className="current-time-dot"></div>
-          </div>
+            style={{
+              top: `${topOffset}px`,
+              left: `calc(80px + ${currentDayIndex} * (100% - 80px) / 7)`,
+              width: `calc((100% - 80px) / 7)`,
+            }}
+          />
         )}
       </div>
     </div>
