@@ -27,7 +27,7 @@ function WeekView({ startOfWeek }) {
     return day;
   });
   // Generate 24 hours for each day column
-  const hours = Array.from({ length: 23 }, (_, i) => i + 1);
+  const hours = Array.from({ length: 24 }, (_, i) => i);
 
   return (
     <div className="week-view">
