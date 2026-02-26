@@ -1,4 +1,25 @@
+import { useState, useEffect } from "react";
+
 function WeekView({ startOfWeek }) {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+  const today = new Date();
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+  const isCurrentWeek = today >= startOfWeek && today < endOfWeek;
+
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  const topOffset = currentHour * 60 + currentMinute;
+
   // Create an array of 7 consecutive days
   const weekDays = Array.from({ length: 7 }, (_, index) => {
     const day = new Date(startOfWeek);
@@ -6,12 +27,13 @@ function WeekView({ startOfWeek }) {
     return day;
   });
   // Generate 24 hours for each day column
-  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const hours = Array.from({ length: 23 }, (_, i) => i + 1);
 
   return (
     <div className="week-view">
       {/* Top row showing the 7 day names */}
       <div className="week-header-row">
+        <div className="week-header-spacer"></div>
         {weekDays.map((day, index) => {
           // Get short weekday name (Sun, Mon, Tue...)
           const weekday = day.toLocaleDateString("en-US", {
@@ -43,16 +65,33 @@ function WeekView({ startOfWeek }) {
             <div key={hour} className="week-row">
               {/* Time label column */}
               <div className="week-time-label">
-                {displayHour}:00 {ampm}
+                <span>
+                  {displayHour}:00 {ampm}
+                </span>
               </div>
 
               {/* 7 day columns for that hour */}
-              {weekDays.map((_, index) => (
-                <div key={index} className="week-cell"></div>
+              {weekDays.map((day, index) => (
+                <div
+                  key={index}
+                  className={`week-cell ${
+                    day.toDateString() === today.toDateString()
+                      ? "today-column"
+                      : ""
+                  }`}
+                ></div>
               ))}
             </div>
           );
         })}
+        {isCurrentWeek && currentHour >= 1 && (
+          <div
+            className="current-time-line"
+            style={{ top: `${topOffset - 60}px` }}
+          >
+            <div className="current-time-dot"></div>
+          </div>
+        )}
       </div>
     </div>
   );
