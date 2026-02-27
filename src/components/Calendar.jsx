@@ -136,15 +136,17 @@ function Calendar() {
         </div>
 
         <div className="calendar-right-controls">
-          <select
-            value={selectedView}
-            onChange={(e) => setSelectedView(e.target.value)}
-          >
-            <option value="year">Year</option>
-            <option value="month">Month</option>
-            <option value="week">Week</option>
-            <option value="day">Day</option>
-          </select>
+          <div className="view-toggle">
+            {["year", "month", "week", "day"].map((v) => (
+              <button
+                key={v}
+                className={selectedView === v ? "active" : ""}
+                onClick={() => setSelectedView(v)}
+              >
+                {v.charAt(0).toUpperCase() + v.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
