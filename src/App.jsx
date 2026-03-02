@@ -4,27 +4,38 @@ import Calendar from "./components/Calendar";
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
   rel="stylesheet"
 ></link>;
+<link
+  href="https://api.fontshare.com/v2/css?f[]=general-sans@700i&display=swap"
+  rel="stylesheet"
+/>;
+
+<link
+  href="https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap"
+  rel="stylesheet"
+/>
 
 function App() {
   return (
     <>
-      {/* LEFT SIDEBAR */}
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <h1>Sporting Calendar</h1>
+      {/* TOP BRAND HEADER */}
+      <header className="brand-header">
+        <div className="brand-inner">
+          <h1 className="brand-title">
+            <span className="brand-sporting">SPORTING</span>
+            <span className="brand-calendar">calendar</span>
+          </h1>
         </div>
-        <div className="sidebar-content">
-          {/* Future:
-              - Sport selector
-              - Team selector
-              - Color picker
-          */}
-        </div>
-      </aside>
+      </header>
 
-      {/* RIGHT MAIN AREA */}
-      <div className="main-area">
-        <Calendar />
+      {/* BODY LAYOUT */}
+      <div className="app-body">
+        <aside className="sidebar">
+          <div className="sidebar-content">{/* Future controls */}</div>
+        </aside>
+
+        <div className="main-area">
+          <Calendar />
+        </div>
       </div>
     </>
   );

@@ -3,15 +3,36 @@
 /* ===================================================== */
 
 /* Root wrapper from Vite */
+
+:root {
+  --cream: #f3f1e8;
+
+  --ink-dark: #23231a;
+  --ink-soft: #322f20;
+
+  --olive: #6a5837;
+  --muted-gold: #988f2a;
+  --accent-orange: #fe5f00;
+
+  --border-subtle: rgba(35, 35, 26, 0.08);
+  --border-strong: rgba(35, 35, 26, 0.15);
+}
 #root {
   width: 100%;
-  height: 100vh;
-  margin: 0; /* Remove auto centering */
-  padding: 0; /* Remove padding */
-  display: flex; /* Horizontal layout */
-  flex-direction: row; /* Sidebar + Main */
-  overflow: hidden; /* Prevent body scroll */
+  height: 100vh; /* Full viewport height */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* STACK header + body */
+  overflow: hidden;
   box-sizing: border-box;
+}
+.app-body {
+  flex: 1; /* Takes remaining space under header */
+  display: flex;
+  flex-direction: row; /* Sidebar + Main */
+  overflow: hidden;
+  min-height: 0; /* IMPORTANT for flex scroll containment */
 }
 
 /* Ensure entire page fills screen height */
@@ -22,30 +43,81 @@ body {
 }
 body {
   overflow: hidden; /* Prevent accidental outer scroll */
+  background: var(--cream);
+  color: var(--ink-dark);
   font-family: "Inter", sans-serif;
-  background-color: #0f0f10;
-  color: #e5e5e5;
+}
+
+/* ========================================= */
+/* BRAND HEADER */
+/* ========================================= */
+
+.brand-header {
+  padding: 10px 0 6px 0;
+  text-align: center;
+  background: var(--cream);
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.brand-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand-title {
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-sporting {
+  display: block;
+  font-family: "General Sans", sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 72px;
+  letter-spacing: -1px; /* tighten slightly for italic */
+  color: var(--ink-dark);
+}
+
+.brand-calendar {
+  display: block;
+  font-family: "Satoshi", sans-serif;
+  font-weight: 700; /* medium */
+  font-size: 26px;
+  text-transform: lowercase;
+  letter-spacing: 1px; /* airy contrast */
+  color: var(--ink-dark);
+  margin-top: 0;
+  align-self: flex-end; /* key line */
 }
 
 /* LEFT SIDEBAR */
 .sidebar {
-  width: 280px; /* Fixed width for now */
-  background: #141416;
-  border-right: 1px solid #333;
+  width: 280px;
+  background: var(--ink-dark);
+  border-right: 1px solid var(--border-strong);
+  color: var(--cream);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex-shrink: 0; /* Prevent collapse */
 }
 
 /* Sidebar header (title area) */
 .sidebar-header {
-  padding: 20px;
+  padding: 28px 20px;
   border-bottom: 1px solid #333;
 }
 
 .sidebar-header h1 {
   margin: 0;
-  font-size: 20px;
+  width: 100%;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  text-transform: none;
 }
 
 /* Sidebar scrollable content */
@@ -61,7 +133,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 0 24px;
+  padding: 1px 48px 24px 48px;
+  min-width: 0; /* Prevent flex overflow glitch */
 }
 
 /* ===================================================== */
@@ -85,8 +158,8 @@ body {
   align-items: center;
   margin-bottom: 10px;
   width: 100%;
-  padding: 16px 0;
-  border-bottom: 1px solid #333;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-strong);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
@@ -109,18 +182,18 @@ button {
 }
 
 .calendar-left-controls button {
-  background: #1c1c1c;
-  border: 1px solid #2c2c2c;
-  color: #ccc;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--ink-soft);
+  color: var(--ink-dark);
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .calendar-left-controls button:hover {
-  background: #252525;
-  color: white;
+  background: var(--ink-dark);
+  color: var(--cream);
 }
 
 .calendar-left-controls button:active {
@@ -129,8 +202,8 @@ button {
 
 /* Header Title (Month / Week Range / Day / Year) */
 .month-title {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   letter-spacing: -0.5px;
   margin-left: 10px;
 }
@@ -141,33 +214,26 @@ button {
 
 .view-toggle {
   display: inline-flex;
-  background: #161616;
+  border: 1px solid var(--border-strong);
+  border-radius: 40px;
   padding: 4px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  background: var(--cream);
 }
 
 .view-toggle button {
-  background: transparent;
-  color: #aaa;
   border: none;
-  padding: 6px 16px;
-  border-radius: 8px;
-  cursor: pointer;
+  background: transparent;
+  padding: 8px 18px;
+  border-radius: 40px;
   font-size: 14px;
+  color: var(--olive);
+  font-weight: 500;
   transition: all 0.2s ease;
-  min-width: 70px;
-  text-align: center;
-}
-
-.view-toggle button:hover {
-  color: white;
 }
 
 .view-toggle button.active {
-  background: #2d2d2d;
-  color: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  background: var(--ink-dark);
+  color: var(--cream);
 }
 
 /* ===================================================== */
@@ -180,10 +246,12 @@ button {
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   padding: 10px 0;
-  font-weight: bold;
-  border-top: 1px solid #444;
-  border-left: 1px solid #444;
-  border-right: 1px solid #444;
+  border: 1px solid var(--border-strong);
+  border-bottom: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--olive);
 }
 
 /* 6-row calendar grid */
@@ -192,17 +260,20 @@ button {
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
   flex: 1; /* Fills remaining height */
-  border: 1px solid #444;
-  border-top: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 /* Individual date cell */
 .date-cell {
-  border: 1px solid #333;
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  border: 1px solid var(--border-subtle);
+  padding: 10px;
+  transition: background 0.2s ease;
+}
+
+.date-cell:hover {
+  background: rgba(152, 143, 42, 0.05);
 }
 
 /* Date number (top-right corner) */
@@ -223,15 +294,14 @@ button {
 
 /* Today highlight */
 .date-cell.today {
-  background-color: #5865f2;
-  color: white;
-  border-radius: 6px;
-  font-weight: bold;
+  background: var(--muted-gold);
+  color: var(--ink-dark);
+  font-weight: 700;
 }
 
 /* Selected date outline */
 .date-cell.selected {
-  outline: 2px solid #646cff;
+  outline: 2px solid var(--accent-orange);
   outline-offset: -2px;
 }
 
@@ -267,17 +337,16 @@ button {
   left: 80px;
   right: 0;
   height: 1px;
-  background: #333;
+  background: var(--border-subtle);
 }
 
 .time-label {
   width: 80px;
   display: flex;
   justify-content: flex-end;
-  padding-right: 8px;
+  padding-right: 12px;
   font-size: 12px;
-  color: #aaa;
-  position: relative;
+  color: var(--ink-dark);
 }
 
 .time-label span {
@@ -304,9 +373,9 @@ button {
 /* Current red time indicator line */
 .current-time-line {
   position: absolute;
-  height: 2px;
-  background-color: transparent; /* remove solid fill */
-  border-top: 2px dashed red; /* dashed line instead */
+  height: 0px;
+  border-top: 2px dashed var(--accent-orange);
+  opacity: 0.9;
   z-index: 10;
   pointer-events: none;
 }
@@ -318,7 +387,8 @@ button {
 .week-header-row {
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr);
-  background-color: #252525;
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--cream);
 }
 .week-header-spacer {
   border-right: 1px solid #333;
@@ -326,21 +396,24 @@ button {
 
 /* Each day header cell */
 .week-header-cell {
-  padding: 10px;
+  padding: 14px 10px;
   text-align: center;
-  border-left: 1px solid #333;
+  border-left: 1px solid var(--border-subtle);
 }
 
 /* Weekday name (Sun, Mon, etc.) */
 .weekday-name {
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--olive);
 }
 
 /* Month/day below weekday */
 .month-day {
   font-size: 12px;
-  color: #aaa;
+  color: var(--ink-dark);
 }
 
 /* ------------------------- */
@@ -366,45 +439,33 @@ button {
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  padding-right: 8px;
-  border-right: 1px solid #333;
+  padding-right: 12px;
+  border-right: 1px solid var(--border-subtle);
   font-size: 12px;
-  color: #aaa;
-  position: relative;
+  color: var(--ink-dark);
 }
 
 .week-time-label span {
-  top: 0;
-  right: 8px;
   font-size: 12px;
-  color: #aaa;
+  font-weight: 500;
+  color: var(--ink-dark);
   transform: translateY(-5px);
 }
 
 /* Individual day cells */
 .week-cell {
-  border-left: 1px solid #333;
-  position: relative;
+  border-left: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 /* Subtle hover effect */
 .week-cell:hover {
-  background-color: #2c2c2c;
+  background: rgba(152, 143, 42, 0.06);
 }
 
 /* Highlight entire current day column */
 .week-cell.today-column {
-  background-color: rgba(100, 108, 255, 0.08);
-}
-
-.week-cell::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #333;
+  background: rgba(152, 143, 42, 0.08);
 }
 
 /* ===================================================== */
@@ -414,13 +475,11 @@ button {
 /* Main 4x3 container (No Scroll) */
 .year-view {
   display: grid;
-  /* 4 columns */
   grid-template-columns: repeat(4, 1fr);
-  /* 3 rows */
   grid-template-rows: repeat(3, 1fr);
-  gap: 40px;
+  gap: 24px; /* reduce from 40px */
   flex: 1;
-  overflow: hidden; /* No scroll */
+  min-height: 0; /* critical */
 }
 
 /* Individual day grid cell */
@@ -448,8 +507,8 @@ button {
 
 /* Perfect circular highlight */
 .year-day-number.today {
-  background-color: #646cff;
-  color: white;
+  background-color: var(--accent-orange);
+  color: var(--cream);
 }
 
 /* Month title */
