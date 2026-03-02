@@ -2,8 +2,9 @@ import { useState } from "react";
 import DayView from "./DayView";
 import WeekView from "./WeekView";
 import YearView from "./YearView";
+import {f1Events} from "../data/f1Events"
 
-function Calendar() {
+function Calendar({selectedLeagues}) {
   const today = new Date();
   const todayYear = today.getFullYear();
   const todayMonth = today.getMonth();
@@ -36,6 +37,11 @@ function Calendar() {
   const totalCells = emptyCells.length + days.length;
   const trailingEmptyCells = Array.from({ length: 42 - totalCells });
   const startOfWeek = getStartOfWeek(currentDate);
+
+  let events = []
+  if (selectedLeagues.includes("F1")) {
+    events = [...events, ...f1Events]
+  }
 
   function getStartOfWeek(currentDate) {
     const start = new Date(currentDate);

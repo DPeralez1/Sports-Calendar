@@ -1,23 +1,25 @@
 import "./App.css";
+import { useState } from "react";
 import Calendar from "./components/Calendar";
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-  rel="stylesheet"
-></link>;
-<link
-  href="https://api.fontshare.com/v2/css?f[]=general-sans@700i&display=swap"
-  rel="stylesheet"
-/>;
+import Sidebar from "./components/Sidebar/Sidebar";
 
-<link
-  href="https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap"
-  rel="stylesheet"
-/>
 
 function App() {
+  // LEVEL STATE (controls sidebar screen)
+  // -------------------------------
+  // "sports" -> show sport icons
+  // "leagues" -> show leagues inside selected sport
+  const [sidebarLevel, setSidebarLevel] = useState("sports");
+  // ACTIVE SPORT (Racing, Soccer, etc.)
+  // -------------------------------
+  const [activeSport, setActiveSport] = useState(null);
+  // SELECTED LEAGUES (ARRAY because we want multiple active later)
+  // -------------------------------
+  const [selectedLeagues, setSelectedLeagues] = useState([]);
+
   return (
     <>
-      {/* TOP BRAND HEADER */}
+      {/* BRAND HEADER */}
       <header className="brand-header">
         <div className="brand-inner">
           <h1 className="brand-title">
@@ -26,15 +28,22 @@ function App() {
           </h1>
         </div>
       </header>
-
       {/* BODY LAYOUT */}
       <div className="app-body">
+        {/* SIDEBAR */}
         <aside className="sidebar">
-          <div className="sidebar-content">{/* Future controls */}</div>
+          <Sidebar
+            sidebarLevel={sidebarLevel}
+            setSidebarLevel={setSidebarLevel}
+            activeSport={activeSport}
+            setActiveSport={setActiveSport}
+            selectedLeagues={selectedLeagues}
+            setSelectedLeagues={setSelectedLeagues}
+          />
         </aside>
 
         <div className="main-area">
-          <Calendar />
+          <Calendar selectedLeagues={selectedLeagues} />
         </div>
       </div>
     </>
