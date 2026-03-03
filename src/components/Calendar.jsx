@@ -2,9 +2,10 @@ import { useState } from "react";
 import DayView from "./DayView";
 import WeekView from "./WeekView";
 import YearView from "./YearView";
-import {f1Events} from "../data/f1Events"
+import { f1Events } from "../data/f1Events";
+import { leagueSeasons } from "../data/leagueSeason";
 
-function Calendar({selectedLeagues}) {
+function Calendar({ selectedLeagues }) {
   const today = new Date();
   const todayYear = today.getFullYear();
   const todayMonth = today.getMonth();
@@ -38,9 +39,9 @@ function Calendar({selectedLeagues}) {
   const trailingEmptyCells = Array.from({ length: 42 - totalCells });
   const startOfWeek = getStartOfWeek(currentDate);
 
-  let events = []
+  let events = [];
   if (selectedLeagues.includes("F1")) {
-    events = [...events, ...f1Events]
+    events = [...events, ...f1Events];
   }
 
   function getStartOfWeek(currentDate) {
@@ -214,7 +215,9 @@ function Calendar({selectedLeagues}) {
         </>
       )}
       {/* Year VIEW */}
-      {selectedView === "year" && <YearView currentDate={currentDate} />}
+      {selectedView === "year" && (
+        <YearView currentDate={currentDate} selectedLeagues={selectedLeagues} />
+      )}
 
       {/* WEEK VIEW */}
       {selectedView === "week" && <WeekView startOfWeek={startOfWeek} />}

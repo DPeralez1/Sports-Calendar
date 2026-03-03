@@ -96,6 +96,9 @@ body {
 /* LEFT SIDEBAR */
 .sidebar {
   width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  overflow-x: hidden;
   background: var(--ink-dark);
   border-right: 1px solid var(--border-strong);
   color: var(--cream);
@@ -539,4 +542,56 @@ button {
   grid-template-rows: repeat(6, 1fr);
 
   flex: 1;
+}
+
+/* =========================
+   SPORT GRID LAYOUT
+========================= */
+
+.sport-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  justify-items: center;
+  align-items: center;
+}
+
+/* =========================
+   CIRCULAR ICON STYLE
+========================= */
+
+.sport-icon {
+  width: 52px; /* smaller */
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6a5837; /* mid-tone brown */
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.sport-icon:hover {
+  background-color: #fe5f00;
+  transform: scale(1.05);
+}
+.sport-icon.active {
+  background-color: #988f2a;
+}
+.season-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.season-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
 }
