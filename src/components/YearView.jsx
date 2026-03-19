@@ -1,6 +1,6 @@
-import { leagueSeasons } from "../data/leagueSeason";
+import { getEventsForDate } from "../data/eventUtils";
 
-function YearView({ currentDate, selectedLeagues }) {
+function YearView({ currentDate, events }) {
   const year = currentDate.getFullYear();
   const today = new Date();
   const monthNames = [
@@ -18,30 +18,6 @@ function YearView({ currentDate, selectedLeagues }) {
     "December",
   ];
   const weekdayLetters = ["S", "M", "T", "W", "TH", "F", "S"];
-
-  // ✅ Season checker lives HERE (not in Calendar)
-  const isDateInSeason = (date, leagueKey) => {
-    const season = leagueSeasons[leagueKey];
-    if (!season) return false;
-
-    const current = new Date(date);
-    const start = new Date(season.start);
-    const end = new Date(season.end);
-
-    if (current < start || current > end) return false;
-
-    for (let b of season.breaks) {
-      const breakStart = new Date(b.start);
-      const breakEnd = new Date(b.end);
-
-      if (current >= breakStart && current <= breakEnd) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   const months = Array.from({ length: 12 }, (_, i) => i);
 
   return (
@@ -74,10 +50,14 @@ function YearView({ currentDate, selectedLeagues }) {
           }
           // Check if this cell is today
           const isToday =
+            isCurrentMonth &&
             dayNumber === today.getDate() &&
             monthIndex === today.getMonth() &&
-            year === today.getFullYear() &&
-            isCurrentMonth;
+            year === today.getFullYear();
+          const eventsOnDay = isCurrentMonth
+            ? getEventsForDate(cellDate, events)
+            : [];
+
           cells.push(
             <div
               key={i}
@@ -86,22 +66,20 @@ function YearView({ currentDate, selectedLeagues }) {
               <div className={`year-day-number ${isToday ? "today" : ""}`}>
                 {dayNumber}
               </div>
-              <div className="season-indicators">
-                {selectedLeagues.map((league) => {
-                  if (isDateInSeason(cellDate, league)) {
-                    return (
-                      <div
-                        key={league}
-                        className="season-dot"
-                        style={{
-                          backgroundColor: leagueSeasons[league].color,
-                        }}
-                      />
-                    );
-                  }
-                  return null;
-                })}
-              </div>
+              {eventsOnDay.length > 0 && (
+                <div className="season-indicators">
+                  {eventsOnDay.map((event) => (
+                    <div
+                      key={event.id}
+                      className="season-dot"
+                      style={{
+                        backgroundColor: event.color,
+                      }}
+                      title={event.title}
+                    />
+                  ))}
+                </div>
+              )}
             </div>,
           );
         }

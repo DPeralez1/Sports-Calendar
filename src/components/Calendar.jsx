@@ -2,19 +2,27 @@ import { useState } from "react";
 import DayView from "./DayView";
 import WeekView from "./WeekView";
 import YearView from "./YearView";
-import { f1Events } from "../data/f1Events";
-import { leagueSeasons } from "../data/leagueSeason";
+import { getAllEvents, filterEventsByLeagues } from "../data/eventUtils";
 
 function Calendar({ selectedLeagues }) {
+  const [selectedView, setSelectedView] = useState("month");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
   const today = new Date();
   const todayYear = today.getFullYear();
   const todayMonth = today.getMonth();
   const todayDate = today.getDate();
-  const [selectedView, setSelectedView] = useState("month");
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [currentDate, setCurrentDate] = useState(new Date());
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
+  const firstDayOfMonth = new Date(year, month, 1);
+  const startDay = firstDayOfMonth.getDay();
+  const emptyCells = Array.from({ length: startDay });
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const prevMonthDays = new Date(year, month, 0).getDate();
+  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
+  const totalCells = emptyCells.length + days.length;
+  const trailingEmptyCells = Array.from({ length: 42 - totalCells });
+
   const monthNames = [
     "January",
     "February",
@@ -29,73 +37,31 @@ function Calendar({ selectedLeagues }) {
     "November",
     "December",
   ];
-  const firstDayOfMonth = new Date(year, month, 1);
-  const startDay = firstDayOfMonth.getDay();
-  const emptyCells = Array.from({ length: startDay });
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const prevMonthDays = new Date(year, month, 0).getDate();
-  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
-  const totalCells = emptyCells.length + days.length;
-  const trailingEmptyCells = Array.from({ length: 42 - totalCells });
+  const filteredEvents = filterEventsByLeagues(getAllEvents(), selectedLeagues);
   const startOfWeek = getStartOfWeek(currentDate);
 
-  let events = [];
-  if (selectedLeagues.includes("F1")) {
-    events = [...events, ...f1Events];
-  }
-
-  function getStartOfWeek(currentDate) {
-    const start = new Date(currentDate);
-    // getDay() gives us weekday index (0–6)
-    const dayOfWeek = start.getDay();
-
-    // Subtract weekday index to go back to Sunday
-    start.setDate(start.getDate() - dayOfWeek);
-
-    // Return calculated Sunday
+  function getStartOfWeek(date) {
+    const start = new Date(date);
+    const dayOfWeek = start.getDay(); // 0 = Sun, 1 = Mon, ...
+    start.setDate(start.getDate() - dayOfWeek); // Go back to Sunday
     return start;
   }
 
   function goToPrev() {
     const newDate = new Date(currentDate);
-
-    if (selectedView === "month") {
-      newDate.setMonth(newDate.getMonth() - 1);
-    }
-    if (selectedView === "week") {
-      newDate.setDate(newDate.getDate() - 7);
-    }
-
-    if (selectedView === "day") {
-      newDate.setDate(newDate.getDate() - 1);
-    }
-
-    if (selectedView === "year") {
-      newDate.setFullYear(newDate.getFullYear() - 1);
-    }
-
+    if (selectedView === "month") newDate.setMonth(newDate.getMonth() - 1);
+    if (selectedView === "week") newDate.setDate(newDate.getDate() - 7);
+    if (selectedView === "day") newDate.setDate(newDate.getDate() - 1);
+    if (selectedView === "year") newDate.setFullYear(newDate.getFullYear() - 1);
     setCurrentDate(newDate);
   }
 
   function goToNext() {
     const newDate = new Date(currentDate);
-
-    if (selectedView === "month") {
-      newDate.setMonth(newDate.getMonth() + 1);
-    }
-
-    if (selectedView === "week") {
-      newDate.setDate(newDate.getDate() + 7);
-    }
-
-    if (selectedView === "day") {
-      newDate.setDate(newDate.getDate() + 1);
-    }
-
-    if (selectedView === "year") {
-      newDate.setFullYear(newDate.getFullYear() + 1);
-    }
-
+    if (selectedView === "month") newDate.setMonth(newDate.getMonth() + 1);
+    if (selectedView === "week") newDate.setDate(newDate.getDate() + 7);
+    if (selectedView === "day") newDate.setDate(newDate.getDate() + 1);
+    if (selectedView === "year") newDate.setFullYear(newDate.getFullYear() + 1);
     setCurrentDate(newDate);
   }
 
@@ -106,27 +72,14 @@ function Calendar({ selectedLeagues }) {
   }
 
   function getHeaderTitle() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-
-    if (selectedView === "month") {
-      return `${monthNames[month]} ${year}`;
-    }
-
+    if (selectedView === "month") return `${monthNames[month]} ${year}`;
+    if (selectedView === "year") return `${year}`;
+    if (selectedView === "day") return currentDate.toDateString();
     if (selectedView === "week") {
-      const startOfWeek = new Date(currentDate);
-      startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
-
-      const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-      return `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
-    }
-    if (selectedView === "day") {
-      return currentDate.toDateString();
-    }
-    if (selectedView === "year") {
-      return `${year}`;
+      const start = getStartOfWeek(currentDate);
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      return `${start.toLocaleDateString()} – ${end.toLocaleDateString()}`;
     }
   }
 
@@ -138,7 +91,6 @@ function Calendar({ selectedLeagues }) {
           <button onClick={goToPrev}>{"<"}</button>
           <button onClick={goToNext}>{">"}</button>
           <button onClick={goToToday}>Today</button>
-
           <div className="month-title">{getHeaderTitle()}</div>
         </div>
 
@@ -173,7 +125,6 @@ function Calendar({ selectedLeagues }) {
           <div className="calendar-grid">
             {emptyCells.map((_, index) => {
               const dayNumber = prevMonthDays - emptyCells.length + index + 1;
-
               return (
                 <div key={`prev-${index}`} className="date-cell other-month">
                   <div className="date-number">{dayNumber}</div>
@@ -183,10 +134,8 @@ function Calendar({ selectedLeagues }) {
 
             {days.map((day) => {
               const cellDate = new Date(year, month, day);
-
               const isToday =
                 day === todayDate && month === todayMonth && year === todayYear;
-
               const isSelected =
                 selectedDate &&
                 cellDate.toDateString() === selectedDate.toDateString();
@@ -216,14 +165,18 @@ function Calendar({ selectedLeagues }) {
       )}
       {/* Year VIEW */}
       {selectedView === "year" && (
-        <YearView currentDate={currentDate} selectedLeagues={selectedLeagues} />
+        <YearView currentDate={currentDate} events={filteredEvents} />
       )}
 
       {/* WEEK VIEW */}
-      {selectedView === "week" && <WeekView startOfWeek={startOfWeek} />}
+      {selectedView === "week" && (
+        <WeekView startOfWeek={startOfWeek} events={filteredEvents} />
+      )}
 
       {/* DAY VIEW */}
-      {selectedView === "day" && <DayView date={currentDate} />}
+      {selectedView === "day" && (
+        <DayView date={currentDate} events={filteredEvents} />
+      )}
     </div>
   );
 }
