@@ -3,7 +3,6 @@ import { useState } from "react";
 import Calendar from "./components/Calendar";
 import Sidebar from "./components/Sidebar/Sidebar";
 
-
 function App() {
   // LEVEL STATE (controls sidebar screen)
   // -------------------------------
@@ -22,10 +21,11 @@ function App() {
       {/* BRAND HEADER */}
       <header className="brand-header">
         <div className="brand-inner">
-          <h1 className="brand-title">
-            <span className="brand-sporting">SPORTING</span>
+          {/* Small wordmark lockup — left aligned like Google Calendar / PagePact */}
+          <div className="brand-lockup">
+            <span className="brand-sporting">Sporting</span>
             <span className="brand-calendar">calendar</span>
-          </h1>
+          </div>
         </div>
       </header>
       {/* BODY LAYOUT */}

@@ -1,5 +1,25 @@
-// Hardcoded F1 season data
-// This is structured to be scalable when switching to API later.
+// ============================================================
+// f1Events.js
+// ============================================================
+// Full 2026 F1 calendar with race dates AND times.
+//
+// TIME FORMAT:
+// ------------
+// We store time separately from date as a "HH:MM" string
+// in 24-hour format. This keeps our existing date-based
+// logic working everywhere while giving Day View the extra
+// data it needs to position events on the timeline.
+//
+// Times are approximate LOCAL start times converted to
+// a display-friendly format. When we connect to a real
+// API later, these will be replaced with accurate UTC times.
+//
+// DURATION:
+// ------------
+// F1 races are approximately 2 hours long.
+// We store duration in minutes so Day View can size the
+// event block correctly on the timeline.
+// ============================================================
 
 export const f1Events = [
   {
@@ -7,6 +27,8 @@ export const f1Events = [
     league: "F1",
     title: "Bahrain Grand Prix",
     date: "2026-03-08",
+    time: "15:00",
+    duration: 120,
     location: "Bahrain International Circuit",
     color: "#FE5F00",
     type: "race",
@@ -16,6 +38,8 @@ export const f1Events = [
     league: "F1",
     title: "Saudi Arabian Grand Prix",
     date: "2026-03-22",
+    time: "20:00",
+    duration: 120,
     location: "Jeddah Corniche Circuit",
     color: "#FE5F00",
     type: "race",
@@ -25,6 +49,8 @@ export const f1Events = [
     league: "F1",
     title: "Australian Grand Prix",
     date: "2026-04-05",
+    time: "15:00",
+    duration: 120,
     location: "Albert Park Circuit",
     color: "#FE5F00",
     type: "race",
@@ -34,6 +60,8 @@ export const f1Events = [
     league: "F1",
     title: "Japanese Grand Prix",
     date: "2026-04-19",
+    time: "14:00",
+    duration: 120,
     location: "Suzuka International Racing Course",
     color: "#FE5F00",
     type: "race",
@@ -43,6 +71,8 @@ export const f1Events = [
     league: "F1",
     title: "Chinese Grand Prix",
     date: "2026-05-03",
+    time: "15:00",
+    duration: 120,
     location: "Shanghai International Circuit",
     color: "#FE5F00",
     type: "race",
@@ -52,6 +82,8 @@ export const f1Events = [
     league: "F1",
     title: "Miami Grand Prix",
     date: "2026-05-10",
+    time: "16:00",
+    duration: 120,
     location: "Miami International Autodrome",
     color: "#FE5F00",
     type: "race",
@@ -61,6 +93,8 @@ export const f1Events = [
     league: "F1",
     title: "Emilia Romagna Grand Prix",
     date: "2026-05-24",
+    time: "15:00",
+    duration: 120,
     location: "Autodromo Enzo e Dino Ferrari",
     color: "#FE5F00",
     type: "race",
@@ -70,6 +104,8 @@ export const f1Events = [
     league: "F1",
     title: "Monaco Grand Prix",
     date: "2026-05-31",
+    time: "15:00",
+    duration: 120,
     location: "Circuit de Monaco",
     color: "#FE5F00",
     type: "race",
@@ -79,6 +115,8 @@ export const f1Events = [
     league: "F1",
     title: "Spanish Grand Prix",
     date: "2026-06-14",
+    time: "15:00",
+    duration: 120,
     location: "Circuit de Barcelona-Catalunya",
     color: "#FE5F00",
     type: "race",
@@ -88,6 +126,8 @@ export const f1Events = [
     league: "F1",
     title: "Canadian Grand Prix",
     date: "2026-06-21",
+    time: "14:00",
+    duration: 120,
     location: "Circuit Gilles Villeneuve",
     color: "#FE5F00",
     type: "race",
@@ -97,6 +137,8 @@ export const f1Events = [
     league: "F1",
     title: "Austrian Grand Prix",
     date: "2026-07-05",
+    time: "15:00",
+    duration: 120,
     location: "Red Bull Ring",
     color: "#FE5F00",
     type: "race",
@@ -106,6 +148,8 @@ export const f1Events = [
     league: "F1",
     title: "British Grand Prix",
     date: "2026-07-19",
+    time: "15:00",
+    duration: 120,
     location: "Silverstone Circuit",
     color: "#FE5F00",
     type: "race",
@@ -115,6 +159,8 @@ export const f1Events = [
     league: "F1",
     title: "Hungarian Grand Prix",
     date: "2026-08-02",
+    time: "15:00",
+    duration: 120,
     location: "Hungaroring",
     color: "#FE5F00",
     type: "race",
@@ -124,6 +170,8 @@ export const f1Events = [
     league: "F1",
     title: "Belgian Grand Prix",
     date: "2026-08-30",
+    time: "15:00",
+    duration: 120,
     location: "Circuit de Spa-Francorchamps",
     color: "#FE5F00",
     type: "race",
@@ -133,6 +181,8 @@ export const f1Events = [
     league: "F1",
     title: "Dutch Grand Prix",
     date: "2026-09-06",
+    time: "15:00",
+    duration: 120,
     location: "Circuit Zandvoort",
     color: "#FE5F00",
     type: "race",
@@ -142,6 +192,8 @@ export const f1Events = [
     league: "F1",
     title: "Italian Grand Prix",
     date: "2026-09-13",
+    time: "15:00",
+    duration: 120,
     location: "Autodromo Nazionale Monza",
     color: "#FE5F00",
     type: "race",
@@ -151,6 +203,8 @@ export const f1Events = [
     league: "F1",
     title: "Azerbaijan Grand Prix",
     date: "2026-09-27",
+    time: "15:00",
+    duration: 120,
     location: "Baku City Circuit",
     color: "#FE5F00",
     type: "race",
@@ -160,6 +214,8 @@ export const f1Events = [
     league: "F1",
     title: "Singapore Grand Prix",
     date: "2026-10-04",
+    time: "20:00",
+    duration: 120,
     location: "Marina Bay Street Circuit",
     color: "#FE5F00",
     type: "race",
@@ -169,6 +225,8 @@ export const f1Events = [
     league: "F1",
     title: "United States Grand Prix",
     date: "2026-10-18",
+    time: "14:00",
+    duration: 120,
     location: "Circuit of The Americas",
     color: "#FE5F00",
     type: "race",
@@ -178,6 +236,8 @@ export const f1Events = [
     league: "F1",
     title: "Mexico City Grand Prix",
     date: "2026-10-25",
+    time: "14:00",
+    duration: 120,
     location: "Autodromo Hermanos Rodriguez",
     color: "#FE5F00",
     type: "race",
@@ -187,6 +247,8 @@ export const f1Events = [
     league: "F1",
     title: "São Paulo Grand Prix",
     date: "2026-11-08",
+    time: "14:00",
+    duration: 120,
     location: "Autodromo José Carlos Pace",
     color: "#FE5F00",
     type: "race",
@@ -196,6 +258,8 @@ export const f1Events = [
     league: "F1",
     title: "Las Vegas Grand Prix",
     date: "2026-11-21",
+    time: "22:00",
+    duration: 120,
     location: "Las Vegas Strip Circuit",
     color: "#FE5F00",
     type: "race",
@@ -205,6 +269,8 @@ export const f1Events = [
     league: "F1",
     title: "Qatar Grand Prix",
     date: "2026-11-29",
+    time: "19:00",
+    duration: 120,
     location: "Lusail International Circuit",
     color: "#FE5F00",
     type: "race",
@@ -214,6 +280,8 @@ export const f1Events = [
     league: "F1",
     title: "Abu Dhabi Grand Prix",
     date: "2026-12-06",
+    time: "17:00",
+    duration: 120,
     location: "Yas Marina Circuit",
     color: "#FE5F00",
     type: "race",

@@ -52,45 +52,55 @@ body {
 /* BRAND HEADER */
 /* ========================================= */
 
+/* Slim nav bar — all space goes to the calendar */
 .brand-header {
-  padding: 10px 0 6px 0;
-  text-align: center;
+  height: 52px; /* fixed height keeps it predictable */
+  display: flex;
+  align-items: center; /* vertically centers the wordmark */
+  justify-content: center;
+  padding: 0 24px; /* horizontal breathing room */
   background: var(--cream);
   border-bottom: 1px solid var(--border-strong);
+  flex-shrink: 0; /* prevents it from shrinking in flex column layout */
 }
 
+/* Left-aligned inner container */
 .brand-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.brand-title {
-  width: fit-content;
-  margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  align-items: center;
 }
 
+/* The wordmark lockup — both words sit on the same baseline */
+.brand-lockup {
+  display: flex;
+  align-items: baseline; /* baseline alignment makes mixed sizes look intentional */
+  gap: 6px; /* small gap between Sporting and calendar */
+}
+
+/* "Sporting" — the primary brand word */
 .brand-sporting {
-  display: block;
   font-family: "General Sans", sans-serif;
   font-style: italic;
   font-weight: 700;
-  font-size: 72px;
-  letter-spacing: -1px; /* tighten slightly for italic */
+  font-size: 22px;
+  letter-spacing: -0.5px;
   color: var(--ink-dark);
+  line-height: 1;
 }
 
+/* "calendar" — secondary, lighter, sits next to Sporting */
 .brand-calendar {
-  display: block;
   font-family: "Satoshi", sans-serif;
-  font-weight: 700; /* medium */
-  font-size: 26px;
+  font-weight: 700;
+  font-size: 12px;
   text-transform: lowercase;
-  letter-spacing: 1px; /* airy contrast */
-  color: var(--ink-dark);
-  margin-top: 0;
-  align-self: flex-end; /* key line */
+  letter-spacing: 1.5px;
+  color: var(--olive); /* olive creates hierarchy without being invisible */
+  line-height: 1;
+
+  /* Reset any previous rotation styles */
+  writing-mode: horizontal-tb;
+  transform: none;
 }
 
 /* LEFT SIDEBAR */
@@ -128,6 +138,34 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
+}
+/* ========================================= */
+/* SIDEBAR BACK BUTTON */
+/* ========================================= */
+
+.sidebar-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid rgba(243, 241, 232, 0.15); /* subtle cream border */
+  color: var(--cream);
+  padding: 8px 14px;
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px; /* space between back button and league list */
+  transition: all 0.2s ease;
+}
+
+.sidebar-back-btn:hover {
+  background: rgba(243, 241, 232, 0.1); /* subtle cream wash on hover */
+  border-color: rgba(243, 241, 232, 0.3);
+}
+
+.sidebar-back-btn:active {
+  transform: scale(0.97);
 }
 
 /* RIGHT MAIN AREA */
@@ -307,6 +345,20 @@ button {
   outline: 2px solid var(--accent-orange);
   outline-offset: -2px;
 }
+.month-event-pill {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cream);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+  white-space: nowrap; /* prevents text wrapping inside the pill */
+  overflow: hidden; /* hides text that overflows the cell width */
+  text-overflow: ellipsis; /* shows "..." when text is cut off */
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box; /* padding is included in width calculation */
+}
 
 /* ===================================================== */
 /* DAY VIEW */
@@ -359,6 +411,49 @@ button {
 /* Right-side content area */
 .time-content {
   flex: 1;
+}
+
+/* Event block inside day view timeline */
+.day-event-block {
+  margin: 2px 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  min-height: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.day-event-block:hover {
+  opacity: 0.85;
+}
+
+/* Event title inside the block */
+.day-event-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Event location below the title */
+.day-event-location {
+  font-size: 10px;
+  color: rgba(243, 241, 232, 0.75); /* cream at 75% opacity */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+/* Time display inside day event block */
+.day-event-time {
+  font-size: 10px;
+  color: rgba(243, 241, 232, 0.85);
+  margin-top: 1px;
 }
 
 /* ===================================================== */
@@ -594,4 +689,104 @@ button {
   width: 5px;
   height: 5px;
   border-radius: 50%;
+}
+
+/* ===================================================== */
+/* EVENT POPUP */
+/* ===================================================== */
+
+/* Full screen overlay — sits on top of everything */
+/* position: fixed means it's positioned relative to the
+   viewport, not the page. So it always covers the full screen
+   regardless of scroll position */
+.popup-overlay {
+  position: fixed;
+  inset: 0; /* shorthand for top/right/bottom/left: 0 */
+  background: rgba(35, 35, 26, 0.4); /* semi-transparent dark wash */
+  z-index: 100; /* sits above everything else */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The popup card itself */
+.popup-card {
+  background: var(--cream);
+  border-radius: 12px;
+  width: 320px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(35, 35, 26, 0.25);
+  position: relative;
+}
+
+/* Colored bar at the top of the card */
+.popup-accent {
+  height: 6px;
+  width: 100%;
+}
+
+/* Close button — top right corner */
+.popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: var(--olive);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.popup-close:hover {
+  background: rgba(35, 35, 26, 0.08);
+}
+
+/* Main content area of the popup */
+.popup-body {
+  padding: 16px 20px 20px 20px;
+}
+
+/* League label — small uppercase */
+.popup-league {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin-bottom: 6px;
+}
+
+/* Event title — the big text */
+.popup-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-dark);
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+/* Date and location lines */
+.popup-detail {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+/* Event type badge at bottom */
+.popup-type {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cream);
+  background: var(--olive);
+  padding: 3px 10px;
+  border-radius: 20px;
 }

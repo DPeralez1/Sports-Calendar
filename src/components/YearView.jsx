@@ -1,6 +1,6 @@
 import { getEventsForDate } from "../data/eventUtils";
 
-function YearView({ currentDate, events }) {
+function YearView({ currentDate, events, onDayDoubleClick }) {
   const year = currentDate.getFullYear();
   const today = new Date();
   const monthNames = [
@@ -62,6 +62,7 @@ function YearView({ currentDate, events }) {
             <div
               key={i}
               className={`year-cell ${!isCurrentMonth ? "other-month" : ""}`}
+              onDoubleClick={() => isCurrentMonth && onDayDoubleClick(cellDate)}
             >
               <div className={`year-day-number ${isToday ? "today" : ""}`}>
                 {dayNumber}

@@ -23,7 +23,12 @@ export default function LeagueList({
   return (
     <div>
       {/* Back Button */}
-      <button onClick={() => setSidebarLevel("sports")}>Back</button>
+      <button
+        className="sidebar-back-btn"
+        onClick={() => setSidebarLevel("sports")}
+      >
+        ← Back
+      </button>
 
       <h3>{activeSport}</h3>
 

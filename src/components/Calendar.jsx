@@ -2,27 +2,24 @@ import { useState } from "react";
 import DayView from "./DayView";
 import WeekView from "./WeekView";
 import YearView from "./YearView";
-import { getAllEvents, filterEventsByLeagues } from "../data/eventUtils";
+import MonthView from "./MonthView";
+import {
+  getAllEvents,
+  filterEventsByLeagues,
+  getEventsForDate,
+} from "../data/eventUtils";
 
 function Calendar({ selectedLeagues }) {
   const [selectedView, setSelectedView] = useState("month");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [popupEvent, setPopupEvent] = useState(null);
   const today = new Date();
   const todayYear = today.getFullYear();
   const todayMonth = today.getMonth();
   const todayDate = today.getDate();
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
-  const firstDayOfMonth = new Date(year, month, 1);
-  const startDay = firstDayOfMonth.getDay();
-  const emptyCells = Array.from({ length: startDay });
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const prevMonthDays = new Date(year, month, 0).getDate();
-  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
-  const totalCells = emptyCells.length + days.length;
-  const trailingEmptyCells = Array.from({ length: 42 - totalCells });
-
   const monthNames = [
     "January",
     "February",
@@ -45,6 +42,12 @@ function Calendar({ selectedLeagues }) {
     const dayOfWeek = start.getDay(); // 0 = Sun, 1 = Mon, ...
     start.setDate(start.getDate() - dayOfWeek); // Go back to Sunday
     return start;
+  }
+
+  function handleDayDoubleClick(date) {
+    setCurrentDate(date);
+    setSelectedDate(date);
+    setSelectedView("day");
   }
 
   function goToPrev() {
@@ -109,63 +112,26 @@ function Calendar({ selectedLeagues }) {
         </div>
       </div>
 
+      {/* YEAR VIEW */}
+      {selectedView === "year" && (
+        <YearView
+          currentDate={currentDate}
+          events={filteredEvents}
+          onDayDoubleClick={handleDayDoubleClick}
+        />
+      )}
+
       {/* MONTH VIEW */}
       {selectedView === "month" && (
-        <>
-          <div className="day-names-row">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thur</div>
-            <div>Fri</div>
-            <div>Sat</div>
-          </div>
-
-          <div className="calendar-grid">
-            {emptyCells.map((_, index) => {
-              const dayNumber = prevMonthDays - emptyCells.length + index + 1;
-              return (
-                <div key={`prev-${index}`} className="date-cell other-month">
-                  <div className="date-number">{dayNumber}</div>
-                </div>
-              );
-            })}
-
-            {days.map((day) => {
-              const cellDate = new Date(year, month, day);
-              const isToday =
-                day === todayDate && month === todayMonth && year === todayYear;
-              const isSelected =
-                selectedDate &&
-                cellDate.toDateString() === selectedDate.toDateString();
-
-              return (
-                <div
-                  key={day}
-                  onClick={() => setSelectedDate(cellDate)}
-                  className={`date-cell
-                  ${isToday ? "today" : ""}
-                  ${isSelected ? "selected" : ""}
-                `}
-                >
-                  <div className="date-number">{day}</div>
-                  <div className="events-container"></div>
-                </div>
-              );
-            })}
-
-            {trailingEmptyCells.map((_, index) => (
-              <div key={`next-${index}`} className="date-cell other-month">
-                <div className="date-number">{index + 1}</div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-      {/* Year VIEW */}
-      {selectedView === "year" && (
-        <YearView currentDate={currentDate} events={filteredEvents} />
+        <MonthView
+          currentDate={currentDate}
+          today={today}
+          selectedDate={selectedDate}
+          filteredEvents={filteredEvents}
+          onDateClick={setSelectedDate}
+          onDayDoubleClick={handleDayDoubleClick}
+          onEventClick={setPopupEvent}
+        />
       )}
 
       {/* WEEK VIEW */}
@@ -176,6 +142,41 @@ function Calendar({ selectedLeagues }) {
       {/* DAY VIEW */}
       {selectedView === "day" && (
         <DayView date={currentDate} events={filteredEvents} />
+      )}
+      {popupEvent && (
+        <div className="popup-overlay" onClick={() => setPopupEvent(null)}>
+          <div className="popup-card" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="popup-accent"
+              style={{ backgroundColor: popupEvent.color }}
+            />
+            <button className="popup-close" onClick={() => setPopupEvent(null)}>
+              ✕
+            </button>
+            <div className="popup-body">
+              <div className="popup-league">{popupEvent.league}</div>
+              <div className="popup-title">{popupEvent.title}</div>
+              <div className="popup-detail">
+                📅{" "}
+                {new Date(popupEvent.date + "T12:00:00").toLocaleDateString(
+                  "en-US",
+                  {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  },
+                )}
+              </div>
+              {popupEvent.location && (
+                <div className="popup-detail">📍 {popupEvent.location}</div>
+              )}
+              {popupEvent.type && (
+                <div className="popup-type">{popupEvent.type}</div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
